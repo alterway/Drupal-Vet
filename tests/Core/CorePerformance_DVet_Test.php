@@ -87,4 +87,12 @@ class CorePerfomance_DVet_Test extends DVet_TestCase {
     $this->assertFalse(module_exists('update'));
   }
 
+  /**
+   * @name Statistics module
+   * @group performance
+   * @failureMessage The core statistics module is a performance disgrace and should be deactivated in favor or other methods of statistics collection.
+   */
+  public function testStatisticsModuleDisabled() {
+    $this->assertFalse(module_exists('statistics'));
+  }
 }
