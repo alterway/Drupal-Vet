@@ -9,24 +9,22 @@ abstract class DVet_TestCase extends PHPUnit_Framework_TestCase {
   const DVET_TEST_SCOPE_SECURITY = 'security';
   const DVET_TEST_SCOPE_SEO = 'seo';
   const DVET_TEST_SCOPE_CORE = 'core';
+  const DVET_TEST_NO_DATASET = '--no_dataset--';
 
-  /**
-   * Gets the name of a TestCase.
-   *
-   * @param  boolean $withDataSet
-   * @return string
-   */
-/*  public function getDataSet() {
-    $ds = '';
+
+  public function getDataSet() {
+    $ds = DVet_TestCase::DVET_TEST_NO_DATASET;
     $matches = array();
-    if ($dataSetAsString = $this->getDataSetAsString(TRUE)) {
-
+    if ($dataSetAsString = $this->getDataSetAsString(FALSE)) {
+      if (preg_match('/with\sdata\sset\s\"(.*)\"$/', $dataSetAsString, $matches)) {
+        $ds = $matches[1];
+      }
+      elseif (preg_match("/with\sdata\sset\s#(.*)$/", $dataSetAsString, $matches)) {
+        $ds = $matches[1];
+      }
     }
-        && (preg_match('with\sdata\sset\s(.*)', $dataSetAsString))) {
-      if (preg_match(''))
 
-
-    }
-  }*/
+    return $ds;
+  }
 
 }

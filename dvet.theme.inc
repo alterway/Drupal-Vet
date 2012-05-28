@@ -38,23 +38,31 @@ function theme_dvet_log($variables) {
 
   $status_report_items = array();
   foreach ($variables['log'] as $class => $class_info) {
-    foreach ($class_info['tests'] as $test => $test_info) {
+    foreach ($class_info['tests'] as $test => $test_info_data) {
+      foreach ($test_info_data as $dataset => $test_info) {
+        if (!in_array($test_info['status'], $run_settings['display_statuses'])
+            || $run_settings['display_statuses'][$test_info['status']] === 0) {
+          continue;
+        }
 
-      if (!in_array($test_info['status'], $run_settings['display_statuses'])
-          || $run_settings['display_statuses'][$test_info['status']] === 0) {
-        continue;
+        $item = array();
+        $item['severity'] = $pu2requirement[$pu[$test_info['status']]];
+        $item['title'] = $test_info['name'];
+
+        if ($dataset != DVet_TestCase::DVET_TEST_NO_DATASET) {
+          $item['title'] .= " ($dataset)";
+        }
+
+        $item['title'] .= ': <em>' . ucwords($pu[$test_info['status']]) . '</em>';
+        $item['value'] = $test_info['message'];
+        if (!empty($test_info['description'])) {
+          $item['description'] = $test_info['description'];
+        }
+
+
+
+        $status_report_items[] = $item;
       }
-
-      $item = array();
-      $item['severity'] = $pu2requirement[$pu[$test_info['status']]];
-      $item['title'] = $test_info['name'];
-      $item['title'] .= ': <em>' . ucwords($pu[$test_info['status']]) . '</em>';
-      $item['value'] = $test_info['message'];
-      if (!empty($test_info['description'])) {
-        $item['description'] = $test_info['description'];
-      }
-
-      $status_report_items[] = $item;
     }
   }
 
@@ -131,9 +139,6 @@ function theme_dvet_report_group($variables) {
     }
   }
 
-
-  // @todo
-  //drupal_add_js(drupal_get_path('module', 'security_review') . '/security_review.js', array('scope' => 'footer'));
   $output = '<h3>' . $variables['header'] . '</h3>';
   $output .= '<table class="system-status-report">';
   if (!empty($variables['items'])) {

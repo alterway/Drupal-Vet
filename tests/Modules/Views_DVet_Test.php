@@ -49,7 +49,7 @@ class Views_DVet_Test extends DVet_TestCase {
         if ($display_name == 'default') {
           continue;
         }
-        $return[] = array($view->name, $display_name);
+        $return["$view->name::$display_name"] = array($view->name, $display_name);
       }
     }
     return $return;

@@ -78,21 +78,22 @@ class Dvet_Listener implements PHPUnit_Framework_TestListener {
     // To create a reflector just to get the classname is a bit too much ...
     $className = get_class($test);
     $methodName = $test->getName(FALSE);
-    //$dataSet =
+    $dataSet = $test->getDataSet();
 
     // Do not overwrite other results. This should never happend.
-    if (isset($this->log[$className]['tests'][$methodName])) {
+    if (isset($this->log[$className]['tests'][$methodName][$dataSet])) {
       return;
     }
 
-    $this->log[$className]['tests'][$methodName] = array(
+    $this->log[$className]['tests'][$methodName][$dataSet] = array(
       'name' => DVet_Util_Test::getName($className, $methodName),
       'description' => DVet_Util_Test::getDescription($className, $methodName),
       'status' => isset($status) ? $status : $test->getStatus(),
+      'dataset' => $dataSet,
     );
 
     if (!($msg = DVet_Util_Test::getStatusMessage(
-      $this->log[$className]['tests'][$methodName]['status'],
+      $this->log[$className]['tests'][$methodName][$dataSet]['status'],
       $className,
       $methodName))) {
 
@@ -101,6 +102,6 @@ class Dvet_Listener implements PHPUnit_Framework_TestListener {
       }
     }
 
-    $this->log[$className]['tests'][$methodName]['message'] = $msg;
+    $this->log[$className]['tests'][$methodName][$dataSet]['message'] = $msg;
   }
 }
