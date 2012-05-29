@@ -15,6 +15,7 @@ class Views_DVet_Test extends DVet_TestCase {
     }
   }
 
+
   /**
    * @name Views UI
    * @group performance
@@ -41,17 +42,24 @@ class Views_DVet_Test extends DVet_TestCase {
   }
 
 
+
   public function viewDisplays() {
     $return = array();
-    $views = views_get_enabled_views();
-    foreach ($views as $view) {
-      foreach (array_keys($view->display) as $display_name) {
-        if ($display_name == 'default') {
-          continue;
+
+    // Data providers are called before setUp,
+    // so have to test the existance of views here.
+    if (module_exists('views')) {
+      $views = views_get_enabled_views();
+      foreach ($views as $view) {
+        foreach (array_keys($view->display) as $display_name) {
+          if ($display_name == 'default') {
+            continue;
+          }
+          $return["$view->name::$display_name"] = array($view->name, $display_name);
         }
-        $return["$view->name::$display_name"] = array($view->name, $display_name);
       }
     }
+
     return $return;
   }
 }

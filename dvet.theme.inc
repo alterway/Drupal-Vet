@@ -25,7 +25,8 @@ function theme_dvet_results($variables) {
 
 function theme_dvet_log($variables) {
 
-  static $pu2requirement = array(
+  include_once './includes/install.inc';
+  $pu2requirement = array(
     'passed' => REQUIREMENT_OK,
     'skipped' => REQUIREMENT_INFO,
     'incomplete' => REQUIREMENT_WARNING,

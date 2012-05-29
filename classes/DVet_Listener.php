@@ -75,7 +75,13 @@ class Dvet_Listener implements PHPUnit_Framework_TestListener {
   }
 
   private function logTestResult($test, $e = NULL, $status = NULL) {
-    // To create a reflector just to get the classname is a bit too much ...
+    /*
+     * Do not log tests that do not inherit from DVet_TestCase.
+     */
+    if (get_parent_class($test) != 'DVet_TestCase') {
+      return;
+    }
+
     $className = get_class($test);
     $methodName = $test->getName(FALSE);
     $dataSet = $test->getDataSet();
